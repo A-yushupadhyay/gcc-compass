@@ -1,0 +1,358 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GCC Compass: where would your India GCC qualify for state incentives?</title>
+    <style>
+      :root {
+        --bg: #f6f7f9;
+        --card: #fff;
+        --ink: #14213d;
+        --mut: #5b6678;
+        --line: #e1e5ec;
+        --acc: #1f5eff;
+        --ok: #0b7a4b;
+        --warn: #a15c00;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0e1420;
+          --card: #161e2e;
+          --ink: #e9eefb;
+          --mut: #9aa7bf;
+          --line: #26324a;
+          --acc: #6b9bff;
+          --ok: #4cd39a;
+          --warn: #f0b04a;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 15px/1.5 system-ui, sans-serif;
+      }
+
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 24px 16px 60px;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin: 0 0 4px;
+      }
+
+      h2 {
+        font-size: 17px;
+        margin: 28px 0 10px;
+      }
+
+      p.sub {
+        color: var(--mut);
+        margin: 0 0 18px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+      }
+
+      form {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: end;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        font-size: 13px;
+        color: var(--mut);
+        gap: 4px;
+      }
+
+      input {
+        padding: 8px 10px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--bg);
+        color: var(--ink);
+        width: 190px;
+        font: inherit;
+      }
+
+      button {
+        padding: 9px 16px;
+        border: 0;
+        border-radius: 6px;
+        background: var(--acc);
+        color: #fff;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 99px;
+        border: 1px solid var(--line);
+        color: var(--mut);
+      }
+
+      .ok {
+        color: var(--ok);
+        border-color: var(--ok);
+      }
+
+      .no {
+        color: var(--warn);
+        border-color: var(--warn);
+      }
+
+      ul {
+        margin: 6px 0 0 18px;
+        padding: 0;
+      }
+
+      li {
+        margin: 2px 0;
+      }
+
+      .small {
+        font-size: 13px;
+        color: var(--mut);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      td,
+      th {
+        border-bottom: 1px solid var(--line);
+        padding: 6px 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .wrap {
+        overflow-x: auto;
+      }
+
+      a {
+        color: var(--acc);
+      }
+
+      #ans {
+        white-space: pre-wrap;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>GCC Compass</h1>
+      <p class="sub">
+        Which Indian state policies would a new GCC of your size qualify for, and
+        how solid is the evidence? Prototype for the Flexiple product assignment.
+        Covers 4 states only; rules checked 26 Oct 2026.
+      </p>
+
+      <div class="card">
+        <form id="f">
+          <label>
+            Employees planned in 3 years
+            <input id="emp" type="number" min="1" value="300" required />
+          </label>
+          <label>
+            Fixed investment, Rs crore (optional)
+            <input id="inv" type="number" min="0" step="any" value="0" />
+          </label>
+          <button>Check eligibility</button>
+        </form>
+
+        <p class="small" style="margin: 10px 0 0;">
+          Amounts shown are <b>policy caps</b>, not expected payouts. Talent
+          availability often matters more than incentives; this tool covers
+          incentives only. Not legal or tax advice.
+        </p>
+      </div>
+
+      <h2 id="rt">Results</h2>
+      <div id="out"></div>
+
+      <h2>Ask the evidence base</h2>
+      <div class="card">
+        <form id="q">
+          <label style="flex: 1;">
+            Question about the four policies
+            <input
+              id="qi"
+              style="width: 100%;"
+              maxlength="500"
+              placeholder="e.g. Can I combine UP incentives with other state schemes?"
+              required
+            />
+          </label>
+          <button id="qb">Ask</button>
+        </form>
+        <div id="ans" class="small"></div>
+      </div>
+
+      <h2>Why do GCC counts disagree?</h2>
+      <div class="card wrap">
+        <table>
+          <tr>
+            <th>Figure</th>
+            <th>Source</th>
+            <th>What it counts</th>
+          </tr>
+          <tr>
+            <td>2,117 GCCs; 3,728 units (FY26)</td>
+            <td>Zinnov-Nasscom 2026 (revenue flagged as an estimate)</td>
+            <td>Parent companies vs individual centres</td>
+          </tr>
+          <tr>
+            <td>1,700+ GCCs; 2,975 units (FY24)</td>
+            <td>Nasscom-Zinnov 2024, via ANI</td>
+            <td>Older edition, still quoted in Dec 2025</td>
+          </tr>
+          <tr>
+            <td>875+ units in Karnataka</td>
+            <td>Karnataka GCC Policy 2024-29</td>
+            <td>
+              Units. Target of 500 new GCCs to reach 1,000 implies about 500
+              GCCs (our inference)
+            </td>
+          </tr>
+          <tr>
+            <td>1,900+ GCCs in FY25; about 1,200 in FY21</td>
+            <td>RSM India, Nov 2025</td>
+            <td>
+              FY21 baseline differs from the series implied by Zinnov-Nasscom
+              (about 1,600). Our inference
+            </td>
+          </tr>
+        </table>
+        <p class="small">
+          Method: read each publisher's page, label definition, period and source
+          type. Full ledger in the research document.
+        </p>
+      </div>
+
+      <p class="small">
+        Not covered yet: Tamil Nadu, Andhra Pradesh, Telangana, Haryana, Madhya
+        Pradesh, Bihar. Rent, talent cost and service-provider quality are not in
+        this evidence base.
+      </p>
+
+      <script src="policies.js"></script>
+      <script src="engine.js"></script>
+      <script>
+        const $ = (id) => document.getElementById(id);
+        const esc = (s) =>
+          String(s).replace(/[&<>\"]/g, (c) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+          }[c]));
+
+        function run() {
+          const emp = +$("emp").value;
+          const inv = +$("inv").value || 0;
+
+          $("out").innerHTML = evaluate(POLICIES, emp, inv)
+            .map(
+              ({ opt: o, tier: t, next: n }) => `
+                <div class="card">
+                  <div class="row">
+                    <b>${esc(o.state)}: ${esc(o.place)}</b>
+                    <span class="tag ${t ? "ok" : "no"}">
+                      ${t ? "Qualifies: " + esc(t.n) : "Below thresholds"}
+                    </span>
+                  </div>
+                  ${
+                    t
+                      ? `<ul>${t.items
+                          .map((i) => `<li>${esc(i)}</li>`)
+                          .join("")}</ul>`
+                      : `<p class="small" style="margin: 6px 0 0;">${
+                          n
+                            ? "Next tier: " +
+                              esc(n.n) +
+                              (n.emp ? ", from " + n.emp + " employees" : "") +
+                              (n.inv ? " or Rs " + n.inv + " cr" : "")
+                            : ""
+                        }</p>`
+                  }
+                  ${o.notes
+                    .map((x) => `<div class="small">Note: ${esc(x)}</div>`)
+                    .join("")}
+                  <div class="small" style="margin-top: 6px;">
+                    Source: <a href="${esc(o.src.u)}" target="_blank" rel="noopener">${esc(o.src.t)}</a>, dated ${esc(o.src.d)}. Last checked 26 Oct 2026.
+                  </div>
+                </div>
+              `
+            )
+            .join("");
+        }
+
+        $("f").addEventListener("submit", (e) => {
+          e.preventDefault();
+          run();
+        });
+
+        run();
+
+        $("q").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const b = $("qb");
+          b.disabled = true;
+          $("ans").textContent = "Thinking...";
+
+          try {
+            const r = await fetch("/api/ask", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ question: $("qi").value }),
+            });
+            const j = await r.json();
+            $("ans").textContent = j.answer || j.error || "No answer.";
+          } catch (x) {
+            $("ans").textContent =
+              "Assistant unavailable. The eligibility engine above still works.";
+          }
+
+          b.disabled = false;
+        });
+      </script>
+    </main>
+  </body>
+</html>
