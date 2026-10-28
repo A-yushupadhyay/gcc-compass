@@ -1,6 +1,5 @@
 const POLICIES = require("../policies.js");
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-
 const text = (j) =>
   j &&
   j.candidates &&
@@ -11,92 +10,67 @@ const text = (j) =>
     : "";
 
 module.exports = async (req, res) => {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "POST only" });
-  }
-
-  const q = String((req.body && req.body.question) || "")
-    .slice(0, 500)
-    .trim();
-
-  if (!q) {
-    return res.status(400).json({ error: "Empty question" });
-  }
-
+  if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
+  const q = String((req.body && req.body.question) || "").slice(0, 500).trim();
+  if (!q) return res.status(400).json({ error: "Empty question" });
   const key = process.env.GEMINI_API_KEY;
-
   if (!key) {
     return res.status(503).json({
       error: "Assistant not configured. The eligibility engine still works.",
     });
   }
-
   const system =
     "You answer questions about Indian state GCC incentive policies using ONLY the JSON rule base below. Cite option ids in brackets like [ka-bb]. If the rule base does not contain the answer (other states, rent, talent cost, provider quality), say 'Not in the evidence base' and do not guess. Separate facts from recommendations. Amounts are policy caps, not expected payouts. Keep it under 150 words.\nRULE BASE:\n" +
     JSON.stringify(POLICIES);
-
+  const started = Date.now();
   const call = async (model) => {
-    const r = await fetch(BASE + "/" + model + ":generateContent", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": key,
-      },
-      body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: system }],
-        },
-        contents: [{ role: "user", parts: [{ text: q }] }],
-      }),
-    });
-
-    return { r, j: await r.json().catch(() => ({})) };
-  };
-
-  try {
-    let { r, j } = await call(process.env.GEMINI_MODEL || "gemini-2.0-flash");
-    let a = text(j);
-
-    if (
-      !a &&
-      j.error &&
-      (r.status === 404 || /not found|not supported/i.test(j.error.message || ""))
-    ) {
-      const l = await (await fetch(BASE, { headers: { "x-goog-api-key": key } }))
-        .json()
-        .catch(() => ({}));
-
-      const names = (l.models || [])
-        .filter(
-          (m) =>
-            (m.supportedGenerationMethods || []).includes("generateContent") &&
-            /flash/.test(m.name) &&
-            !/(image|tts|live|thinking|exp)/.test(m.name)
-        )
-        .map((m) => m.name.replace("models/", ""));
-
-      if (names[0]) {
-        ({ r, j } = await call(names[0]));
-        a = text(j);
-      }
-    }
-
-    if (!a) {
-      return res.status(502).json({
-        error:
-          "Model error (" +
-          r.status +
-          "): " +
-          (((j.error && j.error.message) ||
-            (j.promptFeedback ? "Blocked by safety filter" : "empty response")) +
-            "").slice(0, 200),
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), 4000);
+    try {
+      const r = await fetch(BASE + "/" + model + ":generateContent", {
+        method: "POST", signal: ctl.signal,
+        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: system }] },
+          contents: [{ role: "user", parts: [{ text: q }] }],
+        }),
       });
+      return { r, j: await r.json().catch(() => ({})) };
+    } finally {
+      clearTimeout(t);
     }
-
-    res.json({ answer: a });
-  } catch (e) {
-    return res.status(502).json({
-      error: "Request failed: " + String(e.message).slice(0, 120),
-    });
+  };
+  const primary = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+  const models = [primary];
+  let discovered = false;
+  let last = "";
+  for (let i = 0; i < models.length && Date.now() - started < 8000; i++) {
+    try {
+      const { r, j } = await call(models[i]);
+      const a = text(j);
+      if (a) return res.json({ answer: a });
+      last = (j.error && j.error.message) || (j.promptFeedback ? "blocked" : "empty response");
+      if (r.status === 400 || r.status === 403) break;
+    } catch (e) { last = "timeout"; }
+    if (!discovered) {
+      discovered = true;
+      try {
+        const l = await (await fetch(BASE, { headers: { "x-goog-api-key": key } })).json();
+        (l.models || [])
+          .filter((m) => (m.supportedGenerationMethods || []).includes("generateContent") && /flash/.test(m.name) && !/(image|tts|live|thinking|exp|preview)/.test(m.name))
+          .map((m) => m.name.replace("models/", ""))
+          .sort().reverse().slice(0, 3)
+          .forEach((n) => {
+            if (!models.includes(n)) models.push(n);
+          });
+        models.push(primary);
+      } catch (e) {}
+    }
   }
+  const busy = /demand|overloaded|unavailable|quota|timeout/i.test(last);
+  res.status(busy ? 503 : 502).json({
+    error: busy
+      ? "The AI model is busy right now. Please try again in a few seconds. The eligibility results above are not affected."
+      : "The assistant could not answer this time. The eligibility results above are not affected.",
+  });
 };
