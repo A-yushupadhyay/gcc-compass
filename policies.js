@@ -1,5 +1,4 @@
-// Rule base. Amounts in Rs crore are POLICY CAPS, not expected payouts.
-// Checked 26 Oct 2026.
+// Rule base. Amounts in Rs crore are POLICY CAPS, not expected payouts. Checked 26 Oct 2026.
 const POLICIES = [
   {
     id: "up-ncr",
@@ -87,7 +86,12 @@ const POLICIES = [
       u: "https://www.rsm.global/india/sites/default/files/media/publications/2025/RSM%20India%20Newsflash%20-%20Maharashtra%20Introduces%20the%20GCC%20Policy%202025%20-%20Key%20Highlights%20%26%20Incentives.pdf",
       d: "29 Nov 2025",
     },
-    tiers: [{ n: "Small", inv: 50, emp: 100, cap: 10 }, { n: "Medium", inv: 100, emp: 250, cap: 20 }, { n: "Large", inv: 250, emp: 500, cap: 50 }, { n: "Mega", inv: 500, emp: 750, cap: 100 }].map((t) => ({
+    tiers: [
+      { n: "Small", inv: 50, emp: 100, cap: 10 },
+      { n: "Medium", inv: 100, emp: 250, cap: 20 },
+      { n: "Large", inv: 250, emp: 500, cap: 50 },
+      { n: "Mega", inv: 500, emp: 750, cap: 100 },
+    ].map(t => ({
       ...t,
       items: [
         "Capital subsidy 20% on plant and machinery, cap Rs " + t.cap + " cr",
@@ -110,7 +114,12 @@ const POLICIES = [
       u: "https://www.rsm.global/india/sites/default/files/media/publications/2025/RSM%20India%20Newsflash%20-%20Maharashtra%20Introduces%20the%20GCC%20Policy%202025%20-%20Key%20Highlights%20%26%20Incentives.pdf",
       d: "29 Nov 2025",
     },
-    tiers: [{ n: "Small", inv: 50, emp: 100, cap: 10 }, { n: "Medium", inv: 100, emp: 250, cap: 20 }, { n: "Large", inv: 250, emp: 500, cap: 50 }, { n: "Mega", inv: 500, emp: 750, cap: 100 }].map((t) => ({
+    tiers: [
+      { n: "Small", inv: 50, emp: 100, cap: 10 },
+      { n: "Medium", inv: 100, emp: 250, cap: 20 },
+      { n: "Large", inv: 250, emp: 500, cap: 50 },
+      { n: "Mega", inv: 500, emp: 750, cap: 100 },
+    ].map(t => ({
       ...t,
       items: [
         "Capital subsidy 20% on plant and machinery, cap Rs " + t.cap + " cr",
@@ -145,12 +154,15 @@ const POLICIES = [
         ],
       },
     ],
-    notes: ["No rent, payroll, EPF or property-tax support inside Bengaluru Urban"],
+    notes: [
+      "No rent, payroll, EPF or property-tax support inside Bengaluru Urban",
+    ],
   },
   {
     id: "ka-bb",
     state: "Karnataka",
-    place: "Beyond Bengaluru: Mysuru, Mangaluru, Hubballi-Dharwad-Belagavi, Tumakuru, Kalaburagi, Shivamogga",
+    place:
+      "Beyond Bengaluru: Mysuru, Mangaluru, Hubballi-Dharwad-Belagavi, Tumakuru, Kalaburagi, Shivamogga",
     src: {
       t: "Official policy text (third-party host)",
       u: "https://ssfglobal.in/wp-content/uploads/2025/07/karnataka-gcc-policy-2024-29.pdf",

@@ -1,8 +1,8 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GCC Compass: where would your India GCC qualify for state incentives?</title>
     <style>
       :root {
@@ -179,46 +179,43 @@
     <main>
       <h1>GCC Compass</h1>
       <p class="sub">
-        Which Indian state policies would a new GCC of your size qualify for, and
-        how solid is the evidence? Prototype for the Flexiple product assignment.
-        Covers 4 states only; rules checked 26 Oct 2026.
+        Which Indian state policies would a new GCC of your size qualify for, and how solid is the evidence? Prototype for the Flexiple product assignment. Covers 4 states only; rules checked 26 Oct 2026.
       </p>
 
       <div class="card">
         <form id="f">
           <label>
             Employees planned in 3 years
-            <input id="emp" type="number" min="1" value="300" required />
+            <input id="emp" type="number" min="1" value="300" required>
           </label>
           <label>
             Fixed investment, Rs crore (optional)
-            <input id="inv" type="number" min="0" step="any" value="0" />
+            <input id="inv" type="number" min="0" step="any" value="0">
           </label>
           <button>Check eligibility</button>
         </form>
-
-        <p class="small" style="margin: 10px 0 0;">
-          Amounts shown are <b>policy caps</b>, not expected payouts. Talent
-          availability often matters more than incentives; this tool covers
-          incentives only. Not legal or tax advice.
+        <p class="small" style="margin: 10px 0 0">
+          Amounts shown are <b>policy caps</b>, not expected payouts. Talent availability often matters more than incentives; this tool covers incentives only. Not legal or tax advice.
         </p>
       </div>
 
-      <h2 id="rt">Results</h2>
+      <h2 id="rt">Summary</h2>
+      <div id="sum"></div>
+      <h2>Detail by location</h2>
       <div id="out"></div>
 
       <h2>Ask the evidence base</h2>
       <div class="card">
         <form id="q">
-          <label style="flex: 1;">
+          <label style="flex: 1">
             Question about the four policies
             <input
               id="qi"
-              style="width: 100%;"
+              style="width: 100%"
               maxlength="500"
               placeholder="e.g. Can I combine UP incentives with other state schemes?"
               required
-            />
+            >
           </label>
           <button id="qb">Ask</button>
         </form>
@@ -247,91 +244,78 @@
             <td>875+ units in Karnataka</td>
             <td>Karnataka GCC Policy 2024-29</td>
             <td>
-              Units. Target of 500 new GCCs to reach 1,000 implies about 500
-              GCCs (our inference)
+              Units. Target of 500 new GCCs to reach 1,000 implies about 500 GCCs (our inference)
             </td>
           </tr>
           <tr>
             <td>1,900+ GCCs in FY25; about 1,200 in FY21</td>
             <td>RSM India, Nov 2025</td>
             <td>
-              FY21 baseline differs from the series implied by Zinnov-Nasscom
-              (about 1,600). Our inference
+              FY21 baseline differs from the series implied by Zinnov-Nasscom (about 1,600). Our inference
             </td>
           </tr>
         </table>
         <p class="small">
-          Method: read each publisher's page, label definition, period and source
-          type. Full ledger in the research document.
+          Method: read each publisher's page, label definition, period and source type. Full ledger in the research document.
         </p>
       </div>
 
       <p class="small">
-        Not covered yet: Tamil Nadu, Andhra Pradesh, Telangana, Haryana, Madhya
-        Pradesh, Bihar. Rent, talent cost and service-provider quality are not in
-        this evidence base.
+        Not covered yet: Tamil Nadu, Andhra Pradesh, Telangana, Haryana, Madhya Pradesh, Bihar. Rent, talent cost and service-provider quality are not in this evidence base.
       </p>
-
       <script src="policies.js"></script>
       <script src="engine.js"></script>
       <script>
-        const $ = (id) => document.getElementById(id);
-        const esc = (s) =>
-          String(s).replace(/[&<>\"]/g, (c) => ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-          }[c]));
+        const $ = id => document.getElementById(id);
+        const esc = s =>
+          String(s).replace(/[&<>"]/g, c =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+            })[c]
+          );
+        const badge = s =>
+          /^Official/.test(s.t) ? "Official text" : "Summary of official policy";
+        const nx = n =>
+          !n
+            ? "Top tier reached"
+            : n.needInv
+              ? n.n + ": from Rs " + n.needInv + " cr investment"
+              : n.n +
+                ": from " +
+                (n.emp ? n.emp + " employees" : "") +
+                (n.inv ? (n.emp ? " or " : "") + "Rs " + n.inv + " cr" : "");
 
         function run() {
           const emp = +$("emp").value;
           const inv = +$("inv").value || 0;
+          const R = evaluate(POLICIES, emp, inv);
 
-          $("out").innerHTML = evaluate(POLICIES, emp, inv)
-            .map(
-              ({ opt: o, tier: t, next: n }) => `
-                <div class="card">
-                  <div class="row">
-                    <b>${esc(o.state)}: ${esc(o.place)}</b>
-                    <span class="tag ${t ? "ok" : "no"}">
-                      ${t ? "Qualifies: " + esc(t.n) : "Below thresholds"}
-                    </span>
-                  </div>
-                  ${
-                    t
-                      ? `<ul>${t.items
-                          .map((i) => `<li>${esc(i)}</li>`)
-                          .join("")}</ul>`
-                      : `<p class="small" style="margin: 6px 0 0;">${
-                          n
-                            ? "Next tier: " +
-                              esc(n.n) +
-                              (n.emp ? ", from " + n.emp + " employees" : "") +
-                              (n.inv ? " or Rs " + n.inv + " cr" : "")
-                            : ""
-                        }</p>`
-                  }
-                  ${o.notes
-                    .map((x) => `<div class="small">Note: ${esc(x)}</div>`)
-                    .join("")}
-                  <div class="small" style="margin-top: 6px;">
-                    Source: <a href="${esc(o.src.u)}" target="_blank" rel="noopener">${esc(o.src.t)}</a>, dated ${esc(o.src.d)}. Last checked 26 Oct 2026.
-                  </div>
-                </div>
-              `
-            )
-            .join("");
+          $("sum").innerHTML =
+            '<div class="card wrap"><table><tr><th>Location</th><th>Your tier</th><th>Evidence</th><th>Next tier</th></tr>' +
+            R.map(
+              ({ opt: o, tier: t, next: n }) =>
+                `<tr><td>${esc(o.state)}: ${esc(o.place)}</td><td>${t ? esc(t.n) : "Below thresholds"}</td><td>${badge(o.src)}</td><td>${esc(nx(n))}</td></tr>`
+            ).join("") +
+            '</table><p class="small">Listed by state, not ranked: incentive types and caps differ by state and cannot be compared like for like. Amounts are policy caps.</p></div>';
+          $("out").innerHTML = R.map(
+            ({ opt: o, tier: t, next: n }) =>
+              `<div class="card"><div class="row"><b>${esc(o.state)}: ${esc(o.place)}</b><span class="tag ${t ? "ok" : "no"}">${t ? "Qualifies: " + esc(t.n) : "Below thresholds"}</span></div>
+              ${t ? `<ul>${t.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>` : `<p class="small" style="margin: 6px 0 0">Next tier: ${esc(nx(n))}</p>`}
+              ${o.notes.map(x => `<div class="small">Note: ${esc(x)}</div>`).join("")}
+              <div class="small" style="margin-top: 6px">Evidence: ${badge(o.src)}. Source: <a href="${esc(o.src.u)}" target="_blank" rel="noopener">${esc(o.src.t)}</a>, dated ${esc(o.src.d)}. Last checked 26 Oct 2026.</div></div>`
+          ).join("");
         }
 
-        $("f").addEventListener("submit", (e) => {
+        $("f").addEventListener("submit", e => {
           e.preventDefault();
           run();
         });
-
         run();
 
-        $("q").addEventListener("submit", async (e) => {
+        $("q").addEventListener("submit", async e => {
           e.preventDefault();
           const b = $("qb");
           b.disabled = true;
