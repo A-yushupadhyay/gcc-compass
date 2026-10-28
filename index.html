@@ -276,8 +276,7 @@
               '"': "&quot;",
             })[c]
           );
-        const badge = s =>
-          /^Official/.test(s.t) ? "Official text" : "Summary of official policy";
+        const badge=s=>/policy text/.test(s.t)?"Official policy text":/^Official/.test(s.t)?"Official agency summary":"Summary of official policy";
         const nx = n =>
           !n
             ? "Top tier reached"
