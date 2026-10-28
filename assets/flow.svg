@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 240" width="1200" height="240" role="img" aria-label="How GCC Compass works">
+<rect width="1200" height="240" rx="16" fill="#0f1b2d"/>
+<g font-family="Segoe UI, Arial, sans-serif" text-anchor="middle">
+<rect x="60" y="60" width="300" height="120" rx="14" fill="#16233a" stroke="#2f4a7d" stroke-width="2"/>
+<text x="210" y="105" fill="#8fb0ff" font-size="20" font-weight="700">1  Your profile</text><text x="210" y="138" fill="#e9eefb" font-size="18">headcount and investment</text>
+<rect x="450" y="60" width="300" height="120" rx="14" fill="#16233a" stroke="#6b9bff" stroke-width="2.5"><animate attributeName="stroke-opacity" values="1;0.35;1" dur="3s" repeatCount="indefinite"/></rect>
+<text x="600" y="105" fill="#8fb0ff" font-size="20" font-weight="700">2  Rule engine</text><text x="600" y="138" fill="#e9eefb" font-size="18">tiers per state, same input same answer</text>
+<rect x="840" y="60" width="300" height="120" rx="14" fill="#16233a" stroke="#2f4a7d" stroke-width="2"/>
+<text x="990" y="105" fill="#8fb0ff" font-size="20" font-weight="700">3  Cited result</text><text x="990" y="138" fill="#e9eefb" font-size="18">source, source type, date, caveats</text>
+</g>
+<path d="M360 120 L450 120 M750 120 L840 120" stroke="#6b9bff" stroke-width="3" stroke-dasharray="8 8"><animate attributeName="stroke-dashoffset" from="32" to="0" dur="1.2s" repeatCount="indefinite"/></path>
+<circle r="8" fill="#e9eefb"><animateMotion dur="4s" repeatCount="indefinite" path="M 210 200 L 600 200 L 990 200"/></circle>
+<path d="M210 185 L210 200 L990 200 L990 185" fill="none" stroke="#2f4a7d" stroke-width="2" stroke-dasharray="4 6"/>
+</svg>

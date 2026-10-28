@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="1200" height="320" role="img" aria-label="GCC Compass">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f1b2d"/><stop offset="1" stop-color="#1b2f55"/></linearGradient></defs>
+<rect width="1200" height="320" rx="18" fill="url(#bg)"/>
+<g transform="translate(150 160)">
+<circle r="92" fill="none" stroke="#2f4a7d" stroke-width="3"/>
+<circle r="92" fill="none" stroke="#6b9bff" stroke-width="3" stroke-dasharray="40 540"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/></circle>
+<circle r="60" fill="none" stroke="#2f4a7d" stroke-width="1.5" stroke-dasharray="3 7"/>
+<text y="-100" text-anchor="middle" fill="#8fb0ff" font-size="16" font-family="Segoe UI, Arial, sans-serif">N</text>
+<g><polygon points="0,-78 10,0 -10,0" fill="#6b9bff"/><polygon points="0,78 10,0 -10,0" fill="#3a4f7a"/><circle r="6" fill="#e9eefb"/>
+<animateTransform attributeName="transform" type="rotate" values="-25;18;-8;0;-25" keyTimes="0;0.3;0.55;0.75;1" dur="9s" repeatCount="indefinite"/></g>
+</g>
+<g font-family="Segoe UI, Arial, sans-serif">
+<text x="300" y="150" fill="#e9eefb" font-size="68" font-weight="700" opacity="0"><tspan>GCC Compass</tspan><animate attributeName="opacity" from="0" to="1" dur="1s" begin="0.2s" fill="freeze"/></text>
+<text x="300" y="196" fill="#a9bde6" font-size="24" opacity="0">Which state incentives would your first India GCC qualify for, and how sure are we?<animate attributeName="opacity" from="0" to="1" dur="1s" begin="0.9s" fill="freeze"/></text>
+<g font-size="18" fill="#0f1b2d" font-weight="600">
+<g opacity="0"><rect x="300" y="226" width="118" height="34" rx="17" fill="#8fb0ff"/><text x="359" y="249" text-anchor="middle">4 states</text><animate attributeName="opacity" from="0" to="1" dur="0.6s" begin="1.6s" fill="freeze"/></g>
+<g opacity="0"><rect x="430" y="226" width="150" height="34" rx="17" fill="#8fb0ff"/><text x="505" y="249" text-anchor="middle">Sourced rules</text><animate attributeName="opacity" from="0" to="1" dur="0.6s" begin="2.0s" fill="freeze"/></g>
+<g opacity="0"><rect x="592" y="226" width="196" height="34" rx="17" fill="#8fb0ff"/><text x="690" y="249" text-anchor="middle">Deterministic engine</text><animate attributeName="opacity" from="0" to="1" dur="0.6s" begin="2.4s" fill="freeze"/></g>
+<g opacity="0"><rect x="800" y="226" width="196" height="34" rx="17" fill="#8fb0ff"/><text x="898" y="249" text-anchor="middle">Grounded assistant</text><animate attributeName="opacity" from="0" to="1" dur="0.6s" begin="2.8s" fill="freeze"/></g>
+</g></g></svg>
